@@ -1,13 +1,14 @@
 from flask import Flask, request
 import hmac
 import hashlib
+import os
 import requests
 
 app = Flask(__name__)
 
-TELEGRAM_BOT_TOKEN = '8129372019:AAFP33Rzl6taohTdpmogME-DZETwK3RV1Nc'
-TELEGRAM_CHAT_ID = '226453434'
-IPN_SECRET = 'МояЛюбимаяКошечкаКитти'  # тот самый, что у тебя в CoinPayments
+TELEGRAM_BOT_TOKEN = os.environ['BOT_TOKEN']
+TELEGRAM_CHAT_ID = os.environ['TELEGRAM_CHAT_ID']
+IPN_SECRET = os.environ['IPN_SECRET']  # должен совпадать со значением в CoinPayments Merchant Settings
 
 def send_telegram_message(message):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -34,7 +35,6 @@ def ipn():
         send_telegram_message(message)
 
     return "OK", 200
-import os
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
